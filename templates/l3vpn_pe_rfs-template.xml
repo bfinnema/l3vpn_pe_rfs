@@ -184,7 +184,7 @@
         <!-- JUNOS NED section -->
         <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm">
           <interfaces>
-            <interface>
+            <!-- <interface>
               <name>lo0</name>
               <unit>
                 <name>0</name>
@@ -196,9 +196,9 @@
                   </inet>
                 </family>
               </unit>
-            </interface>
+            </interface> -->
             <interface>
-              <name>xe-0/0/0</name>
+              <name>xe-{/interface/interface_number}</name>
               <description>Link from PE1 to CE1 for L3vpn</description>
               <unit>
                 <name>0</name>
@@ -211,7 +211,8 @@
                 </family>
               </unit>
             </interface>
-            <interface>
+
+            <!-- <interface>
               <name>xe-0/0/1</name>
               <description>Link from PE1 to PE-router</description>
               <mtu>4000</mtu>
@@ -226,15 +227,16 @@
                   <mpls/>
                 </family>
               </unit>
-            </interface>
+            </interface> -->
+
           </interfaces>
           <routing-options>
             <router-id>2.2.2.2</router-id>
             <autonomous-system>
-              <as-number>65000</as-number>
+              <as-number>{/as_number}</as-number>
             </autonomous-system>
           </routing-options>
-          <protocols>
+          <!-- <protocols>
             <bgp>
               <group>
                 <name>ibgp</name>
@@ -250,29 +252,29 @@
                 </neighbor>
               </group>
             </bgp>
-          </protocols>
+          </protocols> -->
           <routing-instances>
             <instance>
-              <name>CE1-L3VPN</name>
+              <name>{/vrf_name}</name>
               <instance-type>vrf</instance-type>
               <interface>
-                <name>xe-0/0/0:0.0</name>
+                <name>xe-{/interface/interface_number}:0.0</name>
               </interface>
               <route-distinguisher>
                 <rd-type>2.2.2.2:12</rd-type>
               </route-distinguisher>
               <vrf-target>
-                <import>65020:1</import>
-                <export>65020:1</export>
+                <import>{/remote_as_number}:1</import>
+                <export>{/remote_as_number}:1</export>
               </vrf-target>
               <protocols>
                 <bgp>
                   <group>
                     <name>CE1</name>
                     <type>external</type>
-                    <peer-as>65020</peer-as>
+                    <peer-as>{/remote_as_number}</peer-as>
                     <neighbor>
-                      <name>192.168.3.7</name>
+                      <name>{/neighbor_ip_address}</name>
                     </neighbor>
                   </group>
                 </bgp>
