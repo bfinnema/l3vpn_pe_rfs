@@ -8,9 +8,6 @@
           <vrf-list>
             <name>{/vrf_name}</name>
             <rd>{/remote_as_number}:1</rd>
-            <vpn>
-              <id>a1:3f6c</id>
-            </vpn>
             <address-family>
               <ipv4>
                 <unicast>
@@ -34,7 +31,6 @@
           </vrf-list>
         </vrf>
         <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
-          <?if {/interface/interface_name = 'TenGigE'}?>
           <TenGigE>
             <id>{/interface/interface_number}</id>
             <vrf>{/vrf_name}</vrf>
@@ -45,19 +41,6 @@
               </address>
             </ipv4>
           </TenGigE>
-          <?end?>
-          <?if {/interface/interface_name = 'GigabitEthernet'}?>
-          <GigabitEthernet>
-            <id>{/interface/interface_number}</id>
-            <vrf>{/vrf_name}</vrf>
-            <ipv4>
-              <address>
-                <ip>{/interface/ipv4_address}</ip>
-                <mask>{/interface/ipv4_mask}</mask>
-              </address>
-            </ipv4>
-          </GigabitEthernet>
-          <?end?>
         </interface>
         <route-policy xmlns="http://tail-f.com/ned/cisco-ios-xr">
           <name>PASS-ALL</name>
@@ -197,6 +180,106 @@
             </address-family>
           </vrf>
         </vrfs>
+
+        <!-- JUNOS NED section -->
+        <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm">
+          <interfaces>
+            <interface>
+              <name>lo0</name>
+              <unit>
+                <name>0</name>
+                <family>
+                  <inet>
+                    <address>
+                      <name>2.2.2.2/32</name>
+                    </address>
+                  </inet>
+                </family>
+              </unit>
+            </interface>
+            <interface>
+              <name>xe-0/0/0</name>
+              <description>Link from PE1 to CE1 for L3vpn</description>
+              <unit>
+                <name>0</name>
+                <family>
+                  <inet>
+                    <address>
+                      <name>{/interface/ipv4_address}/24</name>
+                    </address>
+                  </inet>
+                </family>
+              </unit>
+            </interface>
+            <interface>
+              <name>xe-0/0/1</name>
+              <description>Link from PE1 to PE-router</description>
+              <mtu>4000</mtu>
+              <unit>
+                <name>0</name>
+                <family>
+                  <inet>
+                    <address>
+                      <name>10.1.2.3/24</name>
+                    </address>
+                  </inet>
+                  <mpls/>
+                </family>
+              </unit>
+            </interface>
+          </interfaces>
+          <routing-options>
+            <router-id>2.2.2.2</router-id>
+            <autonomous-system>
+              <as-number>65000</as-number>
+            </autonomous-system>
+          </routing-options>
+          <protocols>
+            <bgp>
+              <group>
+                <name>ibgp</name>
+                <type>internal</type>
+                <local-address>2.2.2.2</local-address>
+                <family>
+                  <inet-vpn>
+                    <unicast/>
+                  </inet-vpn>
+                </family>
+                <neighbor>
+                  <name>192.168.77.88</name>
+                </neighbor>
+              </group>
+            </bgp>
+          </protocols>
+          <routing-instances>
+            <instance>
+              <name>CE1-L3VPN</name>
+              <instance-type>vrf</instance-type>
+              <interface>
+                <name>xe-0/0/0:0.0</name>
+              </interface>
+              <route-distinguisher>
+                <rd-type>2.2.2.2:12</rd-type>
+              </route-distinguisher>
+              <vrf-target>
+                <import>65020:1</import>
+                <export>65020:1</export>
+              </vrf-target>
+              <protocols>
+                <bgp>
+                  <group>
+                    <name>CE1</name>
+                    <type>external</type>
+                    <peer-as>65020</peer-as>
+                    <neighbor>
+                      <name>192.168.3.7</name>
+                    </neighbor>
+                  </group>
+                </bgp>
+              </protocols>
+            </instance>
+          </routing-instances>
+        </configuration>
       </config>
     </device>
   </devices>
