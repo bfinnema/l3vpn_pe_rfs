@@ -3,6 +3,7 @@
     <device>
       <name>{/device}</name>
       <config>
+
         <!-- IOS-XR CLI NED section -->
         <vrf xmlns="http://tail-f.com/ned/cisco-ios-xr">
           <vrf-list>
@@ -83,9 +84,10 @@
             </bgp-no-instance>
           </bgp>
         </router>
+        <!-- End of section -->
         
         <!-- IOS-XR NETCONF NED section -->
-        <interfaces xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-um-interface-cfg">
+        <!-- <interfaces xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-um-interface-cfg">
           <interface>
             <interface-name>{/interface/interface_name}{/interface/interface_number}</interface-name>
             <vrf xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-um-if-vrf-cfg">{/vrf_name}</vrf>
@@ -179,7 +181,8 @@
               </ipv4>
             </address-family>
           </vrf>
-        </vrfs>
+        </vrfs> -->
+        <!-- End of section -->
 
         <!-- JUNOS NED section -->
         <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm">
@@ -282,6 +285,8 @@
             </instance>
           </routing-instances>
         </configuration>
+        <!-- End of section -->
+
       </config>
     </device>
   </devices>
