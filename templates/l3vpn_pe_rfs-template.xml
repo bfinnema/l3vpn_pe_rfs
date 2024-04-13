@@ -187,19 +187,19 @@
         <!-- JUNOS NED section -->
         <configuration xmlns="http://xml.juniper.net/xnm/1.1/xnm">
           <interfaces>
-            <!-- <interface>
-              <name>lo0</name>
+            <interface>
+              <name>lo{$LOOPBACK_IF_NUMBER}</name>
               <unit>
                 <name>0</name>
                 <family>
                   <inet>
                     <address>
-                      <name>2.2.2.2/32</name>
+                      <name>{$LOOPBACK_IP_ADDR}/32</name>
                     </address>
                   </inet>
                 </family>
               </unit>
-            </interface> -->
+            </interface>
             <interface>
               <name>xe-{/interface/interface_number}</name>
               <description>Link from PE1 to CE1 for L3vpn</description>
@@ -208,54 +208,20 @@
                 <family>
                   <inet>
                     <address>
-                      <name>{/interface/ipv4_address}/24</name>
+                      <name>{/interface/ipv4_address}/{$IPV4_CIDR}</name>
                     </address>
                   </inet>
                 </family>
               </unit>
             </interface>
 
-            <!-- <interface>
-              <name>xe-0/0/1</name>
-              <description>Link from PE1 to PE-router</description>
-              <mtu>4000</mtu>
-              <unit>
-                <name>0</name>
-                <family>
-                  <inet>
-                    <address>
-                      <name>10.1.2.3/24</name>
-                    </address>
-                  </inet>
-                  <mpls/>
-                </family>
-              </unit>
-            </interface> -->
-
           </interfaces>
           <routing-options>
-            <router-id>2.2.2.2</router-id>
+            <router-id>{$LOOPBACK_IP_ADDR}</router-id>
             <autonomous-system>
               <as-number>{/as_number}</as-number>
             </autonomous-system>
           </routing-options>
-          <!-- <protocols>
-            <bgp>
-              <group>
-                <name>ibgp</name>
-                <type>internal</type>
-                <local-address>2.2.2.2</local-address>
-                <family>
-                  <inet-vpn>
-                    <unicast/>
-                  </inet-vpn>
-                </family>
-                <neighbor>
-                  <name>192.168.77.88</name>
-                </neighbor>
-              </group>
-            </bgp>
-          </protocols> -->
           <routing-instances>
             <instance>
               <name>{/vrf_name}</name>
@@ -264,7 +230,7 @@
                 <name>xe-{/interface/interface_number}:0.0</name>
               </interface>
               <route-distinguisher>
-                <rd-type>2.2.2.2:12</rd-type>
+                <rd-type>{$LOOPBACK_IP_ADDR}:12</rd-type>
               </route-distinguisher>
               <vrf-target>
                 <import>{/remote_as_number}:1</import>
