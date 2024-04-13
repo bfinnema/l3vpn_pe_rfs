@@ -193,9 +193,13 @@
                 <name>0</name>
                 <family>
                   <inet>
-                    <address>
+                    <address xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0"
+                            nc:operation="replace">
                       <name>{$LOOPBACK_IP_ADDR}/32</name>
                     </address>
+                    <!-- <address>
+                      <name>{$LOOPBACK_IP_ADDR}/32</name>
+                    </address> -->
                   </inet>
                 </family>
               </unit>
