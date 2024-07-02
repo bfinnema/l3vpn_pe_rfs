@@ -41,6 +41,7 @@
                 <mask>{/interface/ipv4_mask}</mask>
               </address>
             </ipv4>
+            <description>{/interface/interface_description}</description>
           </TenGigE>
         </interface>
         <route-policy xmlns="http://tail-f.com/ned/cisco-ios-xr">
@@ -99,6 +100,7 @@
                 </address>
               </addresses>
             </ipv4>
+            <description>{/interface/interface_description}</description>
           </interface>
         </interfaces>
         <routing-policy xmlns="http://cisco.com/ns/yang/Cisco-IOS-XR-um-route-policy-cfg">
@@ -202,7 +204,7 @@
             </interface>
             <interface>
               <name>xe-{/interface/interface_number}</name>
-              <description>Link from PE1 to CE1 for L3vpn</description>
+              <description>{/interface/interface_description}</description>
               <unit>
                 <name>0</name>
                 <family>
